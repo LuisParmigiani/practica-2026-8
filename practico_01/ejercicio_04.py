@@ -8,6 +8,19 @@ def es_vocal_if(letra: str) -> bool:
     Restricción: Utilizar un if para cada posibilidad con la función lower().
     Referencia: https://docs.python.org/3/library/stdtypes.html#string-methods
     """
+
+    letra = letra.lower()
+    if letra == "a":
+        return True
+    if letra == "e":
+        return True
+    if letra == "i":
+        return True
+    if letra == "o":
+        return True
+    if letra == "u":
+        return True
+    return False
     pass # Completar
 
 
@@ -25,6 +38,10 @@ def es_vocal_if_in(letra: str) -> bool:
     """Re-escribir utilizando un sólo IF y el operador IN.
     Referencia: https://docs.python.org/3/reference/expressions.html#membership-test-operations
     """
+    if letra.lower() in "aeiou":
+        return True
+    else:        
+        return False
     pass # Completar
 
 
@@ -40,6 +57,7 @@ assert es_vocal_if_in("A")
 
 def es_vocal_in(letra: str) -> bool:
     """Re-escribir utilizando el operador IN pero sin utilizar IF."""
+    return letra.lower() in "aeiou"
     pass # Completar
 
 
