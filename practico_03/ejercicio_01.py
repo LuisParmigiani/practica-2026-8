@@ -8,6 +8,7 @@ class Rectangulo:
     Implementar la clase Rectangulo que contiene una base y una altura, y el
     método area.
     """
+    
     # Completar
 
 
