@@ -15,5 +15,10 @@ class Socio(Base):
     """
     __tablename__ = 'socios'
 
+    id_socio = Column(Integer, primary_key=True, autoincrement=True) #el unique no es necesario por pk
+    dni = Column(Integer, unique=True)
+    nombre = Column(String(250))
+    apellido = Column(String(250))
+
     # Completar
 
