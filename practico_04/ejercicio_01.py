@@ -2,6 +2,7 @@
 
 import sqlite3
 
+
 def crear_tabla():
     """Implementar la funcion crear_tabla, que cree una tabla Persona con:
         - IdPersona: Int() (autoincremental)
@@ -37,8 +38,12 @@ def borrar_tabla():
 # ANDA, LO PROBÉ EJECUTANDO UN PAR SI EL ARCHIVO TENÍA POR NOMBRE MAIN (CORRER EN MODO SCRIPT) Y FUNCIONA.
 
 # NO MODIFICAR - INICIO
+
+
 def reset_tabla(func):
     def func_wrapper():
+        # Se borra primero para dropear todo lo viejo
+        borrar_tabla()
         crear_tabla()
         func()
         borrar_tabla()
