@@ -25,7 +25,9 @@ def actualizar_precio(articulos: List[Articulo], porcentaje: float) -> List[Arti
     """
     
     # Completar
-
+    return deepcopy(articulos, memo={id(articulo): Articulo(articulo.nombre, articulo.precio * (1 + porcentaje / 100)) for articulo in articulos})
+    #Esto lo que hace es cuando encuentra deepcopy en articulos un articulo con ese id, pone :Eso, es decir, su precio actualizado
+    #Se usa para poner memo id=id_especifico hacer una cosa en particular, cuando queremos que algunos se copien distinto o no se copien
 
 # NO MODIFICAR - INICIO
 nombres = ["sabana", "parlante", "computadora", "tasa", "botella", "celular"]

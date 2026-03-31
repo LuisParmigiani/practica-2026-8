@@ -17,6 +17,14 @@ class Article:
     # NO MODIFICAR - FIN
 
     # Completar
+    def __repr__(self) -> str:
+        return f"Article('{self.name}')"
+    
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Article):
+            return False
+        return self.name == other.name
+
 
 
 # NO MODIFICAR - INICIO
@@ -50,8 +58,37 @@ class ShoppingCart:
     # NO MODIFICAR - FIN
 
     # Completar
+    def __str__(self) -> str:
+        return str([articulo.name for articulo in self.articles])
+    
+    def __repr__(self) -> str:
+        return f"ShoppingCart([{','.join(repr(a) for a in self.articles)}])" #esto es como compresion de listas pero más eficiente
+    #debería devolver ShoppingCart([Article('Manzana'), Article('Pera')]) para poder cumplir
 
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, ShoppingCart):
+            return False
+    # Copias para no modificar los originales
+        self_articles = self.articles[:]
+        other_articles = other.articles[:]
+        if len(self_articles) != len(other_articles):
+            return False
+    # Para cada artículo en self, buscá uno igual en other y sacalo
+        for articulo in self_articles:
+            for i, otro in enumerate(other_articles):
+                if articulo == otro:
+                    del other_articles[i]
+                    break
+            else:
+                return False  # No se encontró un match. si, se pueden hacer else para for en python para que se ejecute si el for terminó normalmente sin break
+        return not other_articles  # Debe quedar vacío si son iguales. not verifica falsedad (en listas, verifica [])
 
+    def __add__(self, other) -> ShoppingCart:
+        if not isinstance(other, ShoppingCart):
+            return NotImplemented
+        new_articles = self.articles + other.articles
+        return ShoppingCart(new_articles)
+    
 # NO MODIFICAR - INICIO
 
 manzana = Article("Manzana")
