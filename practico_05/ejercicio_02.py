@@ -1,62 +1,83 @@
 """Base de Datos - ORM"""
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from ejercicio_01 import Base, Socio
-
+from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from practico_05.ejercicio_01 import Base, Socio
+from sqlalchemy import select, insert, update, delete
 from typing import List, Optional
+
 
 class DatosSocio():
 
     def __init__(self):
-        pass # Completar
+        self.engine = create_engine("sqlite+pysqlite:///:memory:", echo=False)
+        Base.metadata.create_all(self.engine)
+        Session = sessionmaker(bind=self.engine)
+        self.sesion = Session()
 
     def buscar(self, id_socio: int) -> Optional[Socio]:
         """Devuelve la instancia del socio, dado su id. Devuelve None si no 
         encuentra nada.
         """
-        pass # Completar
+        return self.sesion.query(Socio).filter(Socio.id == id_socio).first()
 
     def buscar_dni(self, dni_socio: int) -> Optional[Socio]:
         """Devuelve la instancia del socio, dado su dni. Devuelve None si no 
         encuentra nada.
         """
-        pass # Completar
-        
+        return self.sesion.query(Socio).filter(Socio.dni == dni_socio).first()
+
     def todos(self) -> List[Socio]:
         """Devuelve listado de todos los socios en la base de datos."""
-        pass # Completar
+        return list(self.sesion.query(Socio).all())
 
     def borrar_todos(self) -> bool:
         """Borra todos los socios de la base de datos. Devuelve True si el 
         borrado fue exitoso.
         """
-        pass # Completar
+        result = self.sesion.query(Socio).delete()
+        self.sesion.commit()
+        if result > 0:
+            return True
+        return False
 
     def alta(self, socio: Socio) -> Socio:
         """Agrega un nuevo socio a la tabla y lo devuelve"""
-        pass # Completar
+        self.sesion.add(socio)
+        self.sesion.commit()
+        self.sesion.refresh(socio)  # Le pone el id generado
+        return socio
 
     def baja(self, id_socio: int) -> bool:
         """Borra el socio especificado por el id. Devuelve True si el borrado 
         fue exitoso.
         """
-        pass # Completar
+        socio = self.buscar(id_socio)
+        if socio is None:
+            return False
+        self.sesion.delete(socio)
+        self.sesion.commit()
+        return True
 
     def modificacion(self, socio: Socio) -> Socio:
         """Guarda un socio con sus datos modificados. Devuelve el Socio 
         modificado.
         """
-        pass # Completar
-    
+        stmt = update(Socio).where(Socio.id == socio.id).values(
+            nombre=socio.nombre,
+            apellido=socio.apellido,
+            dni=socio.dni
+        )
+        self.sesion.execute(stmt)
+        self.sesion.commit()
+        return socio
+
     def contarSocios(self) -> int:
         """Devuelve el total de socios que existen en la tabla"""
-        pass # Completar
-
+        return len(self.sesion.query(Socio).all())
 
 
 # NO MODIFICAR - INICIO
-
 # Test Creación
 datos = DatosSocio()
 
@@ -86,10 +107,7 @@ assert socio_3_modificado.id == socio_3.id
 assert socio_3_modificado.nombre == 'Moria'
 assert socio_3_modificado.apellido == 'Casan'
 assert socio_3_modificado.dni == 13264587
-
-# Test Conteo
 assert len(datos.todos()) == 3
-
 # Test Delete
 datos.borrar_todos()
 assert len(datos.todos()) == 0
