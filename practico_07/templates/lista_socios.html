@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block titulo %}Lista de Socios - Gestión de Socios{% endblock %}
+
+{% block contenido %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Lista de Socios</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'crear_socio' %}" class="btn btn-success btn-lg">
+            ➕ Alta
+        </a>
+    </div>
+</div>
+
+{% if socios %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for socio in socios %}
+                    <tr>
+                        <td><strong>{{ socio.id }}</strong></td>
+                        <td>{{ socio.dni }}</td>
+                        <td>{{ socio.nombre }}</td>
+                        <td>{{ socio.apellido }}</td>
+                        <td>
+                            <a href="{% url 'modificar_socio' socio.id %}" class="btn btn-warning btn-sm">
+                                ✏️ Modificar
+                            </a>
+                            <form method="POST" action="{% url 'eliminar_socio' socio.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este socio?')">
+                                    🗑️ Baja
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted">Total de socios: <strong>{{ socios|length }}</strong></p>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        <p>No hay socios registrados. <a href="{% url 'crear_socio' %}">Crear el primer socio</a></p>
+    </div>
+{% endif %}
+{% endblock %}

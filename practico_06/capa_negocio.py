@@ -41,7 +41,7 @@ class NegocioSocio(object):
         :rtype: Socio
         """
         socio = self.datos.buscar_dni(dni_socio)
-        return
+        return socio
 
     def todos(self):
         """

@@ -1,0 +1,59 @@
+{% extends "base.html" %} 
+{% block titulo %}{{ titulo }} - Gestión de Socios{%endblock %} 
+{% block contenido %}
+<div class="row mb-4">
+  <div class="col-md-8">
+    <h1>{{ titulo }}</h1>
+    <p class="text-muted">Socio ID: <strong>{{ socio.id }}</strong></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="id_dni" class="form-label">DNI *</label>
+        <input
+          type="number"
+          class="form-control"
+          name="dni"
+          value="{{ socio.dni }}"
+          readonly
+          id="id_dni"
+        />
+        <small class="text-muted">No se puede modificar el DNI (es único)</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="{{ form.nombre.id_for_label }}" class="form-label"
+          >Nombre *</label
+        >
+        {{ form.nombre }} 
+        {% if form.nombre.errors %}
+        <div class="invalid-feedback d-block">{{ form.nombre.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label for="{{ form.apellido.id_for_label }}" class="form-label"
+          >Apellido *</label
+        >
+        {{ form.apellido }}
+         {% if form.apellido.errors %}
+        <div class="invalid-feedback d-block">{{ form.apellido.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="d-grid gap-2 d-sm-flex">
+        <button type="submit" class="btn btn-primary btn-lg" >✅ Aceptar</button>
+
+        <a href="{% url 'lista_socios' %}" class="btn btn-secondary btn-lg">
+          ❌ Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

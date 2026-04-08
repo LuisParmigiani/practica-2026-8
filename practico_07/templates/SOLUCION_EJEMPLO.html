@@ -1,0 +1,73 @@
+<!--- SOLUCIÓN EJEMPLO DE formulario_modificar.html
+
+Este es un EJEMPLO de cómo debería verse formulario_modificar.html
+después de que LO COMPLETES.
+
+NOTA: Usa esto como referencia, pero POR FAVOR intenta hacerlo tú primero!
+Sigue el patrón de formulario_socio.html
+
+--->
+
+{% extends "base.html" %}
+
+{% block titulo %}{{ titulo }} - Gestión de Socios{% endblock %}
+
+{% block contenido %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>{{ titulo }}</h1>
+        <p class="text-muted">Socio ID: <strong>{{ socio.id }}</strong></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Campo DNI: READONLY (no editable) -->
+            <div class="mb-3">
+                <label for="{{ form.dni.id_for_label }}" class="form-label">DNI *</label>
+                <!-- El atributo readonly impide edición -->
+                <input type="number" 
+                       class="form-control" 
+                       value="{{ form.dni.value }}"
+                       readonly>
+                <small class="text-muted">No se puede modificar el DNI (es único)</small>
+            </div>
+            
+            <!-- Campo Nombre: EDITABLE -->
+            <div class="mb-3">
+                <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.nombre.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Campo Apellido: EDITABLE -->
+            <div class="mb-3">
+                <label for="{{ form.apellido.id_for_label }}" class="form-label">Apellido *</label>
+                {{ form.apellido }}
+                {% if form.apellido.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.apellido.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Botones: Aceptar y Cancelar -->
+            <div class="d-grid gap-2 d-sm-flex">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    ✅ Aceptar
+                </button>
+                <a href="{% url 'lista_socios' %}" class="btn btn-secondary btn-lg">
+                    ❌ Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
